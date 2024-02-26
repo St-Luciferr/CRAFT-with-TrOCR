@@ -36,19 +36,19 @@ def process_image(img):
 
   return rotated
 
-def load_models():
+def load_models(weight_path_craft,weight_path_refine):
   
   """
   Loading TrOCR model which has achieved SOTA metrics on IAM handwriting dataset
   """
   processor = TrOCRProcessor.from_pretrained("microsoft/trocr-base-handwritten")
   model = VisionEncoderDecoderModel.from_pretrained("microsoft/trocr-base-handwritten")
-  craft = Craft(output_dir=None, 
-                crop_type="poly",
-                export_extra=False,
-                link_threshold=0.1,
-                text_threshold=0.3,
-                cuda=torch.cuda.is_available())
+  craft = Craft(
+    crop_type="box", 
+    cuda=torch.cuda.is_available(), 
+    weight_path_craft_net = weight_path_craft, 
+    weight_path_refine_net=weight_path_refine,
+    )
   
   return processor, model, craft
 
